@@ -23,7 +23,7 @@
 
 ## 2. Objects to create
 
-Package **`HOGsbaSubBillActivity`**, solution prefix **`HOGsba`** (proposal, DEC-02). Naming per [C-01](conventions/01-naming-and-extensions.md).
+Package **`HOGsbaSubBillActivity`**, solution prefix **`HOGsba`** (proposal, DEC-02). Naming per [C-01](conventions/d365-finops/01-naming-and-extensions.md).
 
 | Type | Name | Purpose | Depends on |
 |---|---|---|---|
@@ -44,7 +44,7 @@ Package **`HOGsbaSubBillActivity`**, solution prefix **`HOGsba`** (proposal, DEC
 
 ## 3. Design choices
 
-1. **Field name `HOGsbaActivityNumber`.** This is the standard name `ActivityNumber` with the mandatory extension prefix ([C-01 §2](conventions/01-naming-and-extensions.md#2-prefixes)). Microsoft is actively extending Subscription billing towards projects (project fee journals, project deferrals). If it adds `ActivityNumber` to the line one day, an unprefixed field would break the build.
+1. **Field name `HOGsbaActivityNumber`.** This is the standard name `ActivityNumber` with the mandatory extension prefix ([C-01 §2](conventions/d365-finops/01-naming-and-extensions.md#2-prefixes)). Microsoft is actively extending Subscription billing towards projects (project fee journals, project deferrals). If it adds `ActivityNumber` to the line one day, an unprefixed field would break the build.
 2. **Same EDT as the sales order line** (`ProjActivityNumber`). Length, label, help text and relation are then identical, and the copy is a plain assignment.
 3. **Reuse the standard lookup and validation** that the sales order line uses for its Activity number (D-04). We don't write our own query over the WBS. This keeps behaviour identical (closed activities, project hierarchy) and survives service updates.
 4. **Copy as late and as narrowly as possible.** Prefer a hook where the sales order line is initialised **before insert**. Avoid updating an already inserted line (an extra database round trip, and it re-runs `SalesLine.update` logic). Final choice after D-03.

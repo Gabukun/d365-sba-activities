@@ -1,6 +1,6 @@
 # 07 – Test plan
 
-Conventions: [C-02](conventions/02-testing.md). **R** in the last column = regression case, run again on every service update.
+Conventions: [C-02](conventions/d365-finops/02-testing.md). **R** in the last column = regression case, run again on every service update.
 
 ## 1. Test data (fill in on the VM)
 

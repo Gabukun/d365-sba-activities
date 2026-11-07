@@ -41,10 +41,7 @@ Scope decisions of 07.11.2026 (DEC-09): renewals **in**, copy schedule **in**, t
 **Still open (OP-05, OP-06):**
 - Revenue split child lines: inherit the parent's activity?
 - Default from the header? (The header has no activity today; proposal: no.)
-- **Backfill.** Billing schedule lines that exist at go-live have no activity. Sales orders generated from them later would still be empty until someone fills the activity on those lines. Options:
-  - by hand in the form;
-  - in bulk through the data entity (export, add the activity, import);
-  - leave them empty until they end or renew.
+- ~~Backfill of existing lines~~ **Not needed** (07.11.2026): Honegger is setting up Subscription billing now and has no productive billing schedules yet. Condition: the extension must be in production **before** Honegger creates productive schedules, otherwise those lines need the activity filled afterwards (OP-17).
 
 **Out of scope:**
 - The **Project fee journal** invoice type (GA September 2026; it creates project fee journals instead of sales orders).

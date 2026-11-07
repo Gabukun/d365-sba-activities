@@ -1,6 +1,8 @@
 # C-02 – Testing conventions (FinOps extensions)
 
-Reusable across Honegger (HOG) FinOps extension projects. Researched 2026-11-07. Tags as in [C-01](01-naming-and-extensions.md).
+> **Snapshot.** Master copy: [youniform `conventions/d365-finops/02-testing.md`](https://github.com/youserpath/youniform/blob/main/conventions/d365-finops/02-testing.md), snapshot of 07.11.2026. Don't edit here; change youniform and refresh this copy (DEC-11).
+
+Reusable across all D365 Finance & Operations extension projects. Customer-specific values (prefix, existing models, publisher, environments) are in `customers/<customer>.md`. Examples use Honegger (`HOG`). Researched 2026-11-07. Tags as in [C-01](01-naming-and-extensions.md).
 
 ## 1. What Microsoft expects
 
@@ -23,7 +25,7 @@ Microsoft splits testing into these levels ([RSAT overview, "Intended usage"](ht
 | A separate **test package** whose name contains `Test`, e.g. `HOGsbaSubBillActivityTest`. The default build discovers test modules by that word. | MS ([Testing and validations](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/perf-test/testing-validation)) |
 | The test package is **excluded from the deployable package** (`PackagingExclusions` or the `!*Tests` pattern). | MS ([Exclude test packages](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/dev-tools/exclude-test-packages)) |
 | Test classes extend `SysTestCase`. Methods carry `[SysTestMethod]`. | MS ([Testing support](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/perf-test/testing-support)) |
-| Tag every test with `[SysTestCategory('HOG')]` plus the feature code (e.g. `'HOGsba'`), so a run can be filtered. | MS mechanism ([SysTest filtering](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/perf-test/systest-filtering)), Team values |
+| Tag every test with `[SysTestCategory('<CCC>')]` and `[SysTestCategory('<CCC><fff>')]` (e.g. `'HOG'`, `'HOGsba'`), so a run can be filtered. | MS mechanism ([SysTest filtering](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/perf-test/systest-filtering)), Team values |
 | Class name: `<Prefix><Subject>Test`, e.g. `HOGsbaScheduleLineActivityTest`. | Community / Microsoft examples |
 | Method name: `when_given_then` style, e.g. `copyActivity_lineWithActivity_salesLineHasActivity`. | MS ([Public application tests](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/perf-test/public-application-tests)) |
 | Data is rolled back after each test (`SysTestTransaction` defaults to AutoRollback). Never depend on demo data that may not exist. Create what the test needs. | MS |

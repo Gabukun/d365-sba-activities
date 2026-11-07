@@ -1,6 +1,6 @@
 # ADR-001: GitHub now, customer Azure DevOps at handover
 
-**Status:** Proposed. **Date:** 2026-11-07. **Facts:** [C-03](../conventions/03-alm-and-source-control.md).
+**Status:** Proposed. **Date:** 2026-11-07. **Facts:** [C-03](../conventions/d365-finops/03-alm-and-source-control.md).
 
 ## Context
 
@@ -14,7 +14,7 @@
 
 | Concern | Choice |
 |---|---|
-| Source of truth until handover | Private GitHub repo `d365-sba-activities`, Git, trunk-based ([C-03 §2](../conventions/03-alm-and-source-control.md#2-branching)) |
+| Source of truth until handover | Private GitHub repo `d365-sba-activities`, Git, trunk-based ([C-03 §2](../conventions/d365-finops/03-alm-and-source-control.md#2-branching)) |
 | Build and unit tests | On the dev VM in Visual Studio (build + BP check + SysTest). No GitHub Actions X++ pipeline. |
 | CI, if we need it before handover | Azure Pipelines in the sandbox Azure DevOps org, building the GitHub repo. We don't write GitHub Actions YAML that would need rewriting. |
 | Docs, decisions, test cases | Markdown in the repo |
@@ -26,7 +26,7 @@
 - No feature parity gap for what this project needs: Git, PRs, Markdown docs and VM-based tests work the same in both.
 - The gaps are build/deploy tasks and Test Plans. We deliberately take those from Honegger's Azure DevOps at handover instead of rebuilding them in GitHub.
 - Branch protection on a private repo needs GitHub Pro/Team. On GitHub Free, review discipline is by agreement only (OP-09).
-- If Honegger requires Test Plans, the Markdown test cases are imported by CSV ([C-02 §3](../conventions/02-testing.md#3-functional-test-cases)).
+- If Honegger requires Test Plans, the Markdown test cases are imported by CSV ([C-02 §3](../conventions/d365-finops/02-testing.md#3-functional-test-cases)).
 
 ## Rejected alternatives
 

@@ -1,6 +1,8 @@
 # C-03 – ALM and source control (FinOps extensions)
 
-Reusable across Honegger (HOG) FinOps extension projects. Researched 2026-11-07. Tags as in [C-01](01-naming-and-extensions.md). The decision for the current project is in [ADR-001](../adr/ADR-001-github-now-azure-devops-at-handover.md).
+> **Snapshot.** Master copy: [youniform `conventions/d365-finops/03-alm-and-source-control.md`](https://github.com/youserpath/youniform/blob/main/conventions/d365-finops/03-alm-and-source-control.md), snapshot of 07.11.2026. Don't edit here; change youniform and refresh this copy (DEC-11).
+
+Reusable across all D365 Finance & Operations extension projects. Customer-specific values (prefix, existing models, publisher, environments) are in `customers/<customer>.md`. Examples use Honegger (`HOG`). Researched 2026-11-07. Tags as in [C-01](01-naming-and-extensions.md). Each project records its own ALM decision as an ADR (template: `templates/d365-finops-extension/docs/adr/ADR-000-template.md` in youniform; example: d365-sba-activities ADR-001).
 
 ## 1. Version control: Git
 

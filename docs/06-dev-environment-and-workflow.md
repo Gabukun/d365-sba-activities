@@ -46,7 +46,7 @@ Get-Service -Name W3SVC, DynamicsAxBatch -ErrorAction SilentlyContinue | Start-S
 2. Visual Studio creates it inside `PackagesLocalDirectory`. Close Visual Studio, stop the services, **move** the folder to `<repo>\Metadata\HOGsbaSubBillActivity`, run the link script, then start the services again.
 3. Repeat for the test package `HOGsbaSubBillActivityTest` (references: `HOGsbaSubBillActivity`, `TestEssentials`, ATL packages).
 4. Create the Visual Studio projects under `<repo>\Projects\` (not inside `Metadata`).
-5. Turn on best-practice checks for both models ([C-01 §7](conventions/01-naming-and-extensions.md#7-best-practice-checks)).
+5. Turn on best-practice checks for both models ([C-01 §7](conventions/d365-finops/01-naming-and-extensions.md#7-best-practice-checks)).
 
 ## 4. Giving Claude access to F&O
 
@@ -92,6 +92,12 @@ What MCP does **not** give us: AOT metadata and source (it exposes data, forms a
 - Native Windows has **no sandbox**, so permission rules are not a security boundary. Run Claude as a normal user, not a domain admin, and keep secrets off the VM.
 - If the VM database holds a copy of Honegger's data, Claude can read it through SQL. Honegger must agree, or use a test company without customer data (OP-16).
 - Microsoft standard source code is read on the VM as context and is never committed (CLAUDE.md).
+
+### 4b. Starting a work session on the VM
+
+1. Clone both repositories side by side, e.g. `C:\Repos\d365-sba-activities` and `C:\Repos\youniform`, and link the packages (§2).
+2. Start Claude Code in `C:\Repos\d365-sba-activities`. It reads `CLAUDE.md`, which points to the conventions and to doc 02 §4 (discovery).
+3. Work in a feature branch per topic (e.g. `feature/D-12-hgextension-overlap`). Results go into doc 02 / doc 08 and `docs/discovery/`. Push and open a PR, so the cloud session can review.
 
 ## 5. Build, check, test (each change)
 

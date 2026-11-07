@@ -7,7 +7,7 @@ Everything that must be true on the dev VM before discovery (doc 02 §4) and bef
 | # | Item | Expected | Status |
 |---|---|---|---|
 | P-01 | VM version (*Help > About*: product, platform, *Installed models*) | Same as P-02, or lower | |
-| P-02 | Honegger version | Screenshot 07.11.2026 (environment to confirm, OP-16): product **10.0.49 (10.0.2790.83)**, platform **Update73 (7.0.8199.55)**, application models 10.40.3825.34730. Rule: build on the **same or a lower** version than the target ([C-03 §3](conventions/03-alm-and-source-control.md#3-build-and-package)). Production must be confirmed separately. | Partly |
+| P-02 | Honegger version | Screenshot 07.11.2026 (environment to confirm, OP-16): product **10.0.49 (10.0.2790.83)**, platform **Update73 (7.0.8199.55)**, application models 10.40.3825.34730. Rule: build on the **same or a lower** version than the target ([C-03 §3](conventions/d365-finops/03-alm-and-source-control.md#3-build-and-package)). Production must be confirmed separately. | Partly |
 | P-09 | Honegger's own and ISV models on the VM: `HGExtension` (usr) and the *Axtension®* models (ISV; may need license files) | Present and building, so our code is tested against the same stack as hog-uat (D-12) | |
 | P-03 | Feature states mirrored from hog-uat | Done through the *Feature management* entity (section 3) | |
 | P-04 | Subscription billing features enabled | Section 2 | |

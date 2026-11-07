@@ -28,13 +28,16 @@ Billing schedule lines that are linked to a project have no **activity**. The sa
 
 Doc numbers follow the HOG project template (d365-pma-indirectcosts). 03 (data model) is part of 02, and 05 (integration) doesn't apply.
 
-## Conventions (reusable for every HOG FinOps project)
+## Conventions
+
+Master: [youniform](https://github.com/youserpath/youniform) `conventions/`. This repo keeps a snapshot in `docs/conventions/` (DEC-11) so it is complete at handover.
 
 | # | Document | Content |
 |---|---|---|
-| C-01 | [Naming and extensions](docs/conventions/01-naming-and-extensions.md) | Packages, prefixes, extension naming, CoC rules, data entities, BP checks, repo layout, doc markers |
-| C-02 | [Testing](docs/conventions/02-testing.md) | SysTest, ATL, test packages, functional test cases, Azure DevOps Test Plans import, RSAT/Task recorder status |
-| C-03 | [ALM and source control](docs/conventions/03-alm-and-source-control.md) | Git vs TFVC, branching, build/package, platform status, GitHub vs Azure DevOps parity and migration |
+| C-00 | [Documentation](docs/conventions/documentation.md) | Document set, IDs, markers, ADRs |
+| C-01 | [Naming and extensions](docs/conventions/d365-finops/01-naming-and-extensions.md) | Packages, prefixes, extension naming, CoC rules, data entities, BP checks, repo layout, doc markers |
+| C-02 | [Testing](docs/conventions/d365-finops/02-testing.md) | SysTest, ATL, test packages, functional test cases, Azure DevOps Test Plans import, RSAT/Task recorder status |
+| C-03 | [ALM and source control](docs/conventions/d365-finops/03-alm-and-source-control.md) | Git vs TFVC, branching, build/package, platform status, GitHub vs Azure DevOps parity and migration |
 
 ## Repository layout
 
@@ -45,7 +48,7 @@ d365-sba-activities/
 ├── docs/
 │   ├── 01 … 08                   (project documents)
 │   ├── adr/                      (decision records)
-│   ├── conventions/              (C-01 … C-03, reusable)
+│   ├── conventions/              (snapshot of youniform conventions, C-00 … C-03)
 │   └── discovery/                (results from the VM: object lists, feature states – created when needed)
 ├── Metadata/                     (X++ packages, linked into PackagesLocalDirectory – see doc 06)
 │   ├── HOGsbaSubBillActivity/       (after discovery)
