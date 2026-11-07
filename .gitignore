@@ -1,0 +1,30 @@
+# X++ build output inside package folders (community practice, see docs/conventions/03 §1)
+Metadata/*/bin/
+Metadata/*/Resources/
+Metadata/*/XppMetadata/
+Metadata/*/*/BuildModelResult.*
+Metadata/*/*/BuildProjectResult*.*
+Metadata/*/*/BPCheck.xml
+Metadata/*/*/CompileLabels.xml
+*.xref
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+Projects/**/bin/
+Projects/**/obj/
+
+# Packaging and logs
+DeployablePackages/
+*.log
+*.binlog
+
+# Local exports that may contain business data (keep feature-state files explicitly)
+docs/discovery/**/*.xlsx
+!docs/discovery/feature-states/*.xlsx
+
+# OS
+Thumbs.db
+desktop.ini
+.DS_Store
