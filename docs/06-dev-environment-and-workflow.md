@@ -67,7 +67,7 @@ What MCP does **not** give us: AOT metadata and source (it exposes data, forms a
 | Discovery D-01 to D-13 | Gabriel runs each step and pastes the result | Claude reads the standard metadata in `PackagesLocalDirectory` itself (tables, classes, forms, entities) and follows call chains in the code. Runtime proof (which path really runs) still needs one debugger session or a temporary trace; Claude doesn't drive the Visual Studio debugger. |
 | `VERIFY` markers | Stay until you confirm | Mostly resolved by Claude directly in the source |
 | Writing objects | X++ drafts in Markdown | Claude writes the metadata files in `Metadata/` (table, form and entity extensions, classes) |
-| Build and BP check | Gabriel in Visual Studio | Claude runs the build and `xppbp` from the command line and fixes errors in a loop (exact build command: VERIFY on the VM) |
+| Build and BP check | Gabriel in Visual Studio | Claude runs `xppc` and `xppbp` from the command line and fixes errors in a loop (commands: §5.1). Database sync stays in Visual Studio. |
 | SysTest | Gabriel in Test Explorer | Same, unless a command-line test runner works on the VM (VERIFY) |
 | Functional tests in the browser | Gabriel | Gabriel. Claude doesn't click through the F&O client. |
 | Commit, push, PR | Claude in the cloud session | Claude on the VM (needs Git credentials for GitHub on the VM) |
@@ -106,6 +106,73 @@ What MCP does **not** give us: AOT metadata and source (it exposes data, forms a
 3. Run the SysTest classes (Test Explorer, category `HOGsba`).
 4. Run the affected functional TCs (doc 07) and log the results.
 5. Commit on a feature branch and open a PR. The PR text lists the doc IDs (FR, D, TC, DEC).
+
+### 5.1 Command-line build and best-practice check (VM)
+
+Run on 09.11.2026 on `dvhd10049vm`, tools version 7.0.8199.32 in `C:\AosService\PackagesLocalDirectory\Bin`. Switches are taken from `xppc.exe -?` and `xppbp.exe -?`. The `xppbp` switches also match the [CAR command on Microsoft Learn](https://learn.microsoft.com/dynamics365/fin-ops-core/dev-itpro/lcs-solutions/code-migration-lcs-solutions). Microsoft Learn has no reference page for the `xppc` command line.
+
+```powershell
+# Run from any folder. Logs go to <repo>\logs (gitignored). $tag names the work package, e.g. WP-02.
+$pld   = 'C:\AosService\PackagesLocalDirectory'
+$model = 'HOGsbaSubBillActivity'
+$logs  = 'C:\Repos\d365-sba-activities\logs'
+$tag   = 'WP-02'
+New-Item -ItemType Directory -Force $logs | Out-Null
+Push-Location "$pld\Bin"
+
+# 1. Compile the model (writes $pld\$model\bin, same output as Visual Studio)
+& .\xppc.exe "-metadata=$pld" "-compilermetadata=$pld" "-modelmodule=$model" `
+    "-output=$pld\$model\bin" "-referenceFolder=$pld" "-refPath=$pld\$model\bin" `
+    "-log=$logs\$tag-build.log" "-xmlLog=$logs\$tag-build.xml"
+"xppc exit code: $LASTEXITCODE"
+
+# 2. Best-practice check, all rules, our model only
+& .\xppbp.exe "-metadata=$pld" "-compilermetadata=$pld" "-packagesroot=$pld" `
+    "-module=$model" "-model=$model" -all `
+    "-log=$logs\$tag-bp.log" "-xmlLog=$logs\$tag-bp.xml"
+"xppbp exit code: $LASTEXITCODE"
+
+Pop-Location
+```
+
+Result on 09.11.2026 (WP-01 content, 1 element):
+
+| Step | Duration | Errors | Warnings |
+|---|---|---|---|
+| `xppc` | 6 s | 0 | 1: `ExternalReference` / `AssemblyFileNotFound` for `dynamics://Reference/Microsoft.Dynamics___vices.PricingEngine` (missing assembly `Microsoft.Dynamics.Commerce.Runtime.Entities.AttributeBasedPricing`) |
+| `xppbp -all` | 2 s | 0 | 0 |
+
+The compile warning is **not from our model**. The reference element is `ApplicationSuite\Foundation\AxReference\Microsoft.Dynamics___vices.PricingEngine.xml` (Microsoft package). The Visual Studio build writes the same warning to `Metadata\HOGsbaSubBillActivity\BuildModelResult.log`. Treat it as known VM noise; any other warning counts.
+
+What the command line does **not** cover:
+- **Database sync.** After table or table extension changes, sync from Visual Studio (*Build models* with *Synchronize database*). `SyncEngine.exe` is in `Bin` but has not been tried.
+- **Labels.** The model has no label file yet. Once it has one, `LabelC.exe` (in `Bin`) has to run before `xppc`. Command: VERIFY when the label file is added.
+- **Cross-references.** `xppc` updates `DYNAMICSXREFDB` only with `-xref`; the command above leaves it out. Visual Studio updates it (project property *GenerateCrossReferences* = True).
+
+Don't run `xppc` while Visual Studio builds the same model: both write to `$pld\$model\bin`.
+
+### 5.2 Visual Studio project file (`.rnrproj`)
+
+Solution `Projects\HOGsbaSubBillActivity\HOGsbaSubBillActivity.sln`, project `Projects\HOGsbaSubBillActivity\HOGsbaSubBillActivity\HOGsbaSubBillActivity.rnrproj`. Checked 09.11.2026:
+
+- `<Model>HOGsbaSubBillActivity</Model>`. The solution shows the project as `HOGsbaSubBillActivity (USR) [HOGsbaSubBillActivity]`. A project created with the wrong model (it happened once with *FleetManagement*) cannot take our elements.
+- No absolute or user-profile paths. Only `$(MSBuildProgramFiles32)`, `$(MSBuildBinPath)` and `$(BuildTasksDirectory)`.
+- The project only **references** elements. The element XML stays in `Metadata\` (CLAUDE.md).
+
+One `Content` item per element. Confirmed format (written by Visual Studio for WP-01):
+
+```xml
+<Content Include="AxTableExtension\SubBillScheduleLine.HOGsba">
+  <SubType>Content</SubType>
+  <Name>SubBillScheduleLine.HOGsba</Name>
+  <Link>SubBillScheduleLine.HOGsba</Link>
+</Content>
+```
+
+- `Include` = `<metadata type folder>\<element name>`, **without** `.xml`. The folder is the one the element has under `Metadata\HOGsbaSubBillActivity\HOGsbaSubBillActivity\` (`AxTableExtension`, `AxFormExtension`, `AxClass`, …).
+- `Name` and `Link` = element name.
+- Only `AxTableExtension` is confirmed so far. For other types, check the first entry of each type against what Visual Studio writes (VERIFY).
+- Editing the `.rnrproj` by hand while the solution is open makes Visual Studio ask to reload the project. Tell the person who has Visual Studio open before changing it (one writer per file).
 
 ## 6. Packaging and deployment
 
