@@ -28,3 +28,6 @@ docs/discovery/**/*.xlsx
 Thumbs.db
 desktop.ini
 .DS_Store
+
+# Local build and best-practice logs (xppc -log/-xmlLog, xppbp -xmlLog)
+logs/

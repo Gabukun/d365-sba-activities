@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxTableExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>SubBillScheduleLine.HOGsba</Name>
+	<FieldGroupExtensions>
+		<AxTableFieldGroupExtension>
+			<Name>AutoReport</Name>
+			<Fields>
+				<AxTableFieldGroupField>
+					<DataField>HOGsbaActivityNumber</DataField>
+				</AxTableFieldGroupField>
+			</Fields>
+		</AxTableFieldGroupExtension>
+	</FieldGroupExtensions>
+	<FieldGroups />
+	<FieldModifications />
+	<Fields>
+		<AxTableField xmlns=""
+			i:type="AxTableFieldString">
+			<Name>HOGsbaActivityNumber</Name>
+			<AssetClassification>Customer Content</AssetClassification>
+			<ExtendedDataType>ProjActivityNumber</ExtendedDataType>
+			<FeatureClass>SubBillProjectEnableFeature</FeatureClass>
+			<IgnoreEDTRelation>Yes</IgnoreEDTRelation>
+		</AxTableField>
+	</Fields>
+	<FullTextIndexes />
+	<Indexes />
+	<Mappings />
+	<PropertyModifications />
+	<RelationExtensions />
+	<RelationModifications />
+	<Relations>
+		<AxTableRelation xmlns=""
+			i:type="AxTableRelationForeignKey">
+			<Name>HOGsbaSmmActivities</Name>
+			<Cardinality>ZeroMore</Cardinality>
+			<OnDelete>Restricted</OnDelete>
+			<RelatedTable>smmActivities</RelatedTable>
+			<RelatedTableCardinality>ZeroOne</RelatedTableCardinality>
+			<RelationshipType>Association</RelationshipType>
+			<Constraints>
+				<AxTableRelationConstraint xmlns=""
+					i:type="AxTableRelationConstraintField">
+					<Name>HOGsbaActivityNumber</Name>
+					<Field>HOGsbaActivityNumber</Field>
+					<RelatedField>ActivityNumber</RelatedField>
+				</AxTableRelationConstraint>
+			</Constraints>
+			<Index>ActivityNumberIdx</Index>
+		</AxTableRelation>
+	</Relations>
+</AxTableExtension>
