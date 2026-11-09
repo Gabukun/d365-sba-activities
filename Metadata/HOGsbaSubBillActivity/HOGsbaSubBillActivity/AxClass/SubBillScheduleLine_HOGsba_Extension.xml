@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>SubBillScheduleLine_HOGsba_Extension</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// Activity number on billing schedule lines: validation (FR-03, FR-07) and reset on project change (FR-04).
+/// </summary>
+[ExtensionOf(tableStr(SubBillScheduleLine))]
+final class SubBillScheduleLine_HOGsba_Extension
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>validateField</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Validates the activity number when it is entered (FR-03).
+    /// </summary>
+    /// <param name = "_fieldIdToCheck">The field ID of the field to validate.</param>
+    /// <returns>true if the field is valid; otherwise, false.</returns>
+    public boolean validateField(FieldId _fieldIdToCheck)
+    {
+        boolean ret = next validateField(_fieldIdToCheck);
+
+        if (ret && _fieldIdToCheck == fieldNum(SubBillScheduleLine, HOGsbaActivityNumber))
+        {
+            ret = this.hogsbaValidateActivity();
+        }
+
+        return ret;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>validateWrite</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Validates the activity number on save, which also covers data entity imports (FR-07).
+    /// Only checked when the record is new or the activity or the project changed, so a line whose
+    /// activity was closed later can still be saved (DEC-14).
+    /// </summary>
+    /// <returns>true if the record is valid; otherwise, false.</returns>
+    public boolean validateWrite()
+    {
+        boolean ret = next validateWrite();
+
+        if (this.hogsbaIsActivityChanged())
+        {
+            ret = this.hogsbaValidateActivity() && ret;
+        }
+
+        return ret;
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>modifiedFieldValue</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Clears the activity number when the project of the line changes or is cleared (FR-04).
+    /// Standard reacts to a project change in this method, not in modifiedField.
+    /// </summary>
+    /// <param name = "_fieldName">The field name.</param>
+    /// <param name = "_arrayIndex">The array index.</param>
+    public void modifiedFieldValue(FieldName _fieldName, int _arrayIndex)
+    {
+        next modifiedFieldValue(_fieldName, _arrayIndex);
+
+        if (_fieldName == fieldStr(SubBillScheduleLine, ProjId) && this.HOGsbaActivityNumber)
+        {
+            this.HOGsbaActivityNumber = '';
+        }
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>hogsbaValidateActivity</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Checks that the activity number is empty or belongs to the project of the line (FR-03).
+    /// Same check as <c>SalesLine.checkActivity</c>: the activity exists, is not closed (if
+    /// <c>ProjParameters.EnableActivityIdCheck</c> is on) and is linked to the project.
+    /// Without a project the check fails with the standard message.
+    /// </summary>
+    /// <returns>true if the activity number is valid; otherwise, false.</returns>
+    public boolean hogsbaValidateActivity()
+    {
+        if (!this.HOGsbaActivityNumber)
+        {
+            return true;
+        }
+
+        return ProjActivityHelper::validateProjActivityParentLinkV2(this.ProjId, this.HOGsbaActivityNumber);
+    }
+
+]]></Source>
+			</Method>
+			<Method>
+				<Name>hogsbaIsActivityChanged</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Determines whether the activity number has to be validated on save.
+    /// </summary>
+    /// <returns>true if an activity is set and the record is new, or the activity or the project changed.</returns>
+    private boolean hogsbaIsActivityChanged()
+    {
+        if (!this.HOGsbaActivityNumber)
+        {
+            return false;
+        }
+
+        SubBillScheduleLine orig = this.orig();
+
+        return !this.RecId
+            || this.HOGsbaActivityNumber != orig.HOGsbaActivityNumber
+            || this.ProjId != orig.ProjId;
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

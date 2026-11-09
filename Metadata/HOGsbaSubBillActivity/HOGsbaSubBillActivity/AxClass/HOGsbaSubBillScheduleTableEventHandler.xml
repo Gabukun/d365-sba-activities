@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxClass xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+	<Name>HOGsbaSubBillScheduleTableEventHandler</Name>
+	<SourceCode>
+		<Declaration><![CDATA[
+/// <summary>
+/// Event handlers for form SubBillScheduleTable: lookup for the activity number on the billing schedule line (FR-02).
+/// </summary>
+/// <remarks>
+/// The lookup is an event handler, not a CoC wrapper: a CoC lookup() must call next, which would also
+/// open the default lookup from the smmActivities relation. CancelSuperCall() suppresses it.
+/// A regular class, because the compiler warns against event handlers in extension classes.
+/// </remarks>
+final class HOGsbaSubBillScheduleTableEventHandler
+{
+}
+]]></Declaration>
+		<Methods>
+			<Method>
+				<Name>activityNumber_OnLookup</Name>
+				<Source><![CDATA[
+    /// <summary>
+    /// Shows the activities of the line's project, like the activity number lookup on the sales order line
+    /// (form SalesTable, data field SalesLine.ActivityNumber).
+    /// </summary>
+    /// <param name = "_sender">The activity number control.</param>
+    /// <param name = "_e">The event arguments.</param>
+    [FormControlEventHandler(formControlStr(SubBillScheduleTable, SubBillScheduleLine_HOGsbaActivityNumber), FormControlEventType::Lookup)]
+    public static void activityNumber_OnLookup(FormControl _sender, FormControlEventArgs _e)
+    {
+        FormControlCancelableSuperEventArgs cancelableArgs = _e as FormControlCancelableSuperEventArgs;
+        SubBillScheduleLine scheduleLine = _sender.formRun().dataSource(formDataSourceStr(SubBillScheduleTable, SubBillScheduleLine)).cursor();
+
+        HierarchyTreeTable::lookupHierarchyTree(_sender as FormStringControl, ProjTable::find(scheduleLine.ProjId));
+
+        if (cancelableArgs)
+        {
+            cancelableArgs.CancelSuperCall();
+        }
+    }
+
+]]></Source>
+			</Method>
+		</Methods>
+	</SourceCode>
+</AxClass>

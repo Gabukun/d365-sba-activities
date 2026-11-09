@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AxFormExtension xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="Microsoft.Dynamics.AX.Metadata.V6">
+	<Name>SubBillScheduleTable.HOGsba</Name>
+	<ControlModifications />
+	<Controls>
+		<AxFormExtensionControl xmlns="">
+			<Name>FormExtensionControlhogsba01</Name>
+			<FormControl xmlns=""
+				i:type="AxFormStringControl">
+				<Name>SubBillScheduleLine_HOGsbaActivityNumber</Name>
+				<Type>String</Type>
+				<FormControlExtension
+					i:nil="true" />
+				<DataField>HOGsbaActivityNumber</DataField>
+				<DataSource>SubBillScheduleLine</DataSource>
+			</FormControl>
+			<Parent>Project</Parent>
+			<PositionType>AfterItem</PositionType>
+			<PreviousSibling>SubBillScheduleLine_ProjId</PreviousSibling>
+		</AxFormExtensionControl>
+	</Controls>
+	<DataSourceModifications />
+	<DataSourceReferences />
+	<DataSources />
+	<Parts />
+	<PropertyModifications />
+</AxFormExtension>

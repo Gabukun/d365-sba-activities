@@ -47,10 +47,10 @@ Package **`HOGsbaSubBillActivity`**, solution prefix **`HOGsba`** (DEC-02). Nami
 |---|---|---|---|
 | Descriptor | `HOGsbaSubBillActivity` | Model, layer usr. References: `SubscriptionBilling`, `ApplicationSuite` (`ProjActivityNumber`, `ProjActivityHelper`, `SalesLine`), `CaseManagement` (`HierarchyTreeTable`, `smmActivities`), `ApplicationFoundation`, `ApplicationPlatform`. Final list after the first build. | D-01 done |
 | Table ext. | `SubBillScheduleLine.HOGsba` | Field **`HOGsbaActivityNumber`** (EDT `ProjActivityNumber`, standard label). Add to `AutoReport` like the standard project fields (there is no project field group). Relation to `smmActivities` like `SalesLine`. `FeatureClass` `SubBillProjectEnableFeature` like the standard project fields, if the property is allowed on an extension field (VERIFY at build). | D-01 done |
-| Table ext. | `SubBillSalesLineConsolidated.HOGsba` | Field `HOGsbaActivityNumber`. Carries the activity from the schedule line to the sales line, like standard carries `ProjId`. | D-05 done |
-| Class (CoC) | `SubBillScheduleLine_HOGsba_Extension` | `validateField`, `validateWrite` (FR-03, also for imports), `modifiedField` (FR-04) | D-04 done |
-| Form ext. | `SubBillScheduleTable.HOGsba` | Control `SubBillScheduleLine_HOGsbaActivityNumber` in group `Project` on tab page `TabProject`, after `SubBillScheduleLine_ProjId` | D-02 done |
-| Lookup | form data field or control event handler, name TBD | Lookup (FR-02) via `HierarchyTreeTable::lookupHierarchyTree` with the line's project. The standard data field methods on this form are `[Hookable(false)]`, so the lookup goes on **our** field/control. Mechanism (data field CoC vs `OnLookup` handler): decide at build. | D-04 done |
+| Table ext. | `SubBillSalesLineConsolidated.HOGsba` | Field `HOGsbaActivityNumber` (EDT `ProjActivityNumber`, `IgnoreEDTRelation` Yes, `FeatureClass` `SubBillProjectEnableFeature` like the standard project fields of this table). No relation, no field group. Carries the activity from the schedule line to the sales line, like standard carries `ProjId`. **Built (WP-02).** | D-05 done |
+| Class (CoC) | `SubBillScheduleLine_HOGsba_Extension` | `validateField` (FR-03), `validateWrite` (FR-03, FR-07), **`modifiedFieldValue`** (FR-04; standard handles `ProjId` there, `modifiedField` has no `ProjId` case). **Built (WP-02).** | D-04 done |
+| Form ext. | `SubBillScheduleTable.HOGsba` | Control `SubBillScheduleLine_HOGsbaActivityNumber` in group `Project` on tab page `TabProject`, after `SubBillScheduleLine_ProjId`. **Built (WP-02).** | D-02 done |
+| Lookup | Class `HOGsbaSubBillScheduleTableEventHandler` | Lookup (FR-02) via `HierarchyTreeTable::lookupHierarchyTree` with `ProjTable::find(line.ProjId)`, as on the sales order line. `FormControlEventType::Lookup` handler on our control with `CancelSuperCall()` (DEC-16). **Built (WP-02).** | D-04 done |
 | Class (CoC) | `SubBillCreateSalesOrder_HOGsba_Extension` | Wraps 4 public static methods: `addScheduleLineSelectionFields`, `addScheduleLineGroupByFields` (FR-06), `initializeSubBillSalesLineConsolidated`, `createSalesLine` (FR-05) | D-03, D-05 static done |
 | Class (CoC) | `SubBillMassTermination_HOGsba_Extension` | Same three query/initialise hooks for termination credits (FR-13) | D-09 static done |
 | Class (CoC) | customer split hook, name TBD | `SubBillCreateSalesOrderCustomerSplit::assignSalesLineConsolidatedValues`, only if OP-19 says the activity applies to split lines | OP-19 |
@@ -211,6 +211,8 @@ $packages | Where-Object Name -like 'HG*' | ForEach-Object {
 All drafts: **not compiled**. Standard names in them are confirmed on the VM (§1, §4.1) unless marked VERIFY.
 
 ### 5.1 Billing schedule line: validation and reset
+
+> **Superseded by the compiled code (WP-02, 09.11.2026):** `Metadata/HOGsbaSubBillActivity/HOGsbaSubBillActivity/AxClass/SubBillScheduleLine_HOGsba_Extension.xml`. Differences to the draft below: the reset is in `modifiedFieldValue`, not `modifiedField` (standard handles `ProjId` there); `validateWrite` checks only when the line is new or the activity or project changed (DEC-17). Lookup: `HOGsbaSubBillScheduleTableEventHandler` (DEC-16).
 
 ```xpp
 /// <summary>
