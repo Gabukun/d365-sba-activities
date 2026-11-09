@@ -5,7 +5,7 @@
 | **Customer** | Honegger AG |
 | **Product** | Dynamics 365 Finance & Operations: Subscription billing (Recurring contract billing) with Project management and accounting |
 | **Dev environment** | VHD dev VM `dvhd10049vm` (F&O `dvhdm100049dm`, 10.0.49) |
-| **Status** | Draft v0.2 – 07.11.2026. Scope and naming agreed (DEC-02, DEC-09). Discovery: D-02 done. No X++ compiled yet. |
+| **Status** | Draft v0.2 – 07.11.2026. Scope and naming agreed (DEC-02, DEC-09). Discovery: D-01, D-02, D-04, D-06, D-10 done; static part of D-03, D-05, D-09, D-11, D-13 done (09.11.2026); D-12 blocked (Honegger models not on the VM). No X++ compiled yet. |
 | **Owner** | Gabriel Burgener, AlfaPeople Switzerland |
 
 ## Purpose
