@@ -13,6 +13,7 @@ This is a Dynamics 365 Finance & Operations X++ extension for Honegger: package 
 
 - Discovery, builds and best-practice checks run in the Claude session **on the dev VM** (DEC-13). Cloud sessions can't reach the VM (Tailscale only); they do research, docs and review, and exchange results through this repo.
 - On the VM: read standard metadata in `PackagesLocalDirectory`, but **don't query business data in the database** until OP-16 is closed. Never change Microsoft or ISV packages; only our own packages under `Metadata/`.
+- The Visual Studio solution and project live under `Projects/`; element metadata (XML) stays only under `Metadata/`.
 - The user works on Windows: give **PowerShell** commands, not bash.
 - Keep IDs stable and cross-referenced: FR (doc 01), D (doc 02), TC (doc 07), DEC/OP/R (doc 08), ADR. Commit messages and PRs reference these IDs, not issue numbers.
 - Question the request and say where it may cause trouble later (upgrades, consolidation, posting, migration to the customer's Azure DevOps).

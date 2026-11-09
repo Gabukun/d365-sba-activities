@@ -2,6 +2,7 @@
 Metadata/*/bin/
 Metadata/*/Resources/
 Metadata/*/XppMetadata/
+Metadata/*/BuildModelResult.*
 Metadata/*/*/BuildModelResult.*
 Metadata/*/*/BuildProjectResult*.*
 Metadata/*/*/BPCheck.xml
