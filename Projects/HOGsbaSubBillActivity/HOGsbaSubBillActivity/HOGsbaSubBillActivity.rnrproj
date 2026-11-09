@@ -33,6 +33,26 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="AxClass\HOGsbaSubBillScheduleTableEventHandler">
+      <SubType>Content</SubType>
+      <Name>HOGsbaSubBillScheduleTableEventHandler</Name>
+      <Link>HOGsbaSubBillScheduleTableEventHandler</Link>
+    </Content>
+    <Content Include="AxClass\SubBillScheduleLine_HOGsba_Extension">
+      <SubType>Content</SubType>
+      <Name>SubBillScheduleLine_HOGsba_Extension</Name>
+      <Link>SubBillScheduleLine_HOGsba_Extension</Link>
+    </Content>
+    <Content Include="AxFormExtension\SubBillScheduleTable.HOGsba">
+      <SubType>Content</SubType>
+      <Name>SubBillScheduleTable.HOGsba</Name>
+      <Link>SubBillScheduleTable.HOGsba</Link>
+    </Content>
+    <Content Include="AxTableExtension\SubBillSalesLineConsolidated.HOGsba">
+      <SubType>Content</SubType>
+      <Name>SubBillSalesLineConsolidated.HOGsba</Name>
+      <Link>SubBillSalesLineConsolidated.HOGsba</Link>
+    </Content>
     <Content Include="AxTableExtension\SubBillScheduleLine.HOGsba">
       <SubType>Content</SubType>
       <Name>SubBillScheduleLine.HOGsba</Name>
